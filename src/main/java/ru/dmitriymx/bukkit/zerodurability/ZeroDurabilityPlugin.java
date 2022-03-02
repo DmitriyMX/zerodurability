@@ -26,7 +26,6 @@ public class ZeroDurabilityPlugin extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onCraft(CraftItemEvent event) {
-        getLogger().info("on craft");
         if (event.getCurrentItem() == null) {
             return;
         }
@@ -73,7 +72,5 @@ public class ZeroDurabilityPlugin extends JavaPlugin implements Listener {
         Damageable damageable = (Damageable) itemMeta;
         damageable.setDamage(itemStack.getType().getMaxDurability());
         itemStack.setItemMeta(damageable);
-
-        getLogger().info("break!");
     }
 }
