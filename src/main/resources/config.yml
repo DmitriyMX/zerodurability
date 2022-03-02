@@ -1,0 +1,10 @@
+legacy:
+  - WOOD_AXE
+  - DIAMOND_AXE
+
+# minecraft:wooden_axe
+# minecraft:diamond_axe
+modern:
+  minecraft:
+    - wooden_axe
+    - diamond_axe

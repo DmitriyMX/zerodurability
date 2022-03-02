@@ -1,0 +1,67 @@
+//file:noinspection GroovyAssignabilityCheck
+import org.apache.tools.ant.filters.ReplaceTokens
+
+plugins {
+    id 'java'
+    id 'maven-publish'
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
+}
+
+group 'ru.dmitriymx.bukkit'
+version '1.0'
+jar.archiveBaseName.set(project.name)
+
+compileJava {
+    sourceCompatibility = targetCompatibility = JavaVersion.VERSION_11
+    options.encoding = 'UTF-8'
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+}
+
+dependencies {
+    compileOnly('org.spigotmc:spigot-api:1.18.1-R0.1-SNAPSHOT') {
+        exclude(module: 'gson')
+        exclude(module: 'guava')
+        exclude(module: 'commons-lang')
+        exclude(module: 'bungeecord-chat')
+    }
+}
+
+processResources {
+    filteringCharset 'UTF-8'
+    filter(ReplaceTokens, tokens: [BUKKIT_PLUGIN_VERSION: project.version.toString()])
+}
+
+
+shadowJar {
+    archiveBaseName.set(project.name)
+    archiveVersion.set(project.version.toString())
+    archiveClassifier.set('')
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = project.group
+            artifactId = project.name
+            version = project.version
+
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            url 'https://gitlab.com/api/v4/projects/34143427/packages/maven'
+            credentials(HttpHeaderCredentials) {
+                name = 'Job-Token'
+                value = System.getenv('CI_JOB_TOKEN')
+            }
+            authentication {
+                header(HttpHeaderAuthentication)
+            }
+        }
+    }
+}
