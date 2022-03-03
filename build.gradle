@@ -23,7 +23,7 @@ plugins {
 }
 
 group 'ru.dmitriymx.bukkit'
-version '1.0'
+version '1.0.1'
 jar.archiveBaseName.set(project.name)
 
 compileJava {
