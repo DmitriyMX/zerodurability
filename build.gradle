@@ -3,6 +3,7 @@ import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
     id 'java'
+    id 'idea'
     id 'maven-publish'
     id 'com.github.johnrengelman.shadow' version '7.0.0'
 }
@@ -44,6 +45,32 @@ shadowJar {
     archiveVersion.set(project.version.toString())
     archiveClassifier.set('')
 }
+
+def genSrcDir = "${project.buildDir}/generated/sources/plugininfo/java/main"
+sourceSets.main.java {
+    srcDirs += genSrcDir
+}
+idea.module {
+    generatedSourceDirs += file(genSrcDir)
+}
+
+def generatePluginInfoClass(Project project, String genSrcDir) {
+    def rootPackageDir = 'ru/dmitriymx/bukkit/zerodurability'
+    file("${genSrcDir}/${rootPackageDir}").mkdirs()
+    //noinspection GrUnresolvedAccess
+    file("${genSrcDir}/${rootPackageDir}/PluginInfo.java").text = """package ${rootPackageDir.replaceAll('/', '.')};
+
+public final class PluginInfo {
+    public static final String NAME = "${project.name}";
+    public static final String VERSION = "${project.version.toString()}";
+    public static final String AUTHOR = "DmitriyMX";
+    public static final String WEBSITE = "https://gitlab.com/DmitriyMX/zerodurability";
+
+    private PluginInfo() {}
+}
+"""
+}
+generatePluginInfoClass(project, genSrcDir)
 
 publishing {
     publications {

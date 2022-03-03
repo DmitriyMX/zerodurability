@@ -17,9 +17,9 @@ import org.bukkit.plugin.java.annotation.plugin.author.Author;
 
 import java.util.stream.Stream;
 
-@Plugin(name = "ZeroDurabillity", version = "1.0")
-@Author("DmitriyMX")
-@Website("https://gitlab.com/DmitriyMX/zerodurability")
+@Plugin(name = PluginInfo.NAME, version = PluginInfo.VERSION)
+@Author(PluginInfo.AUTHOR)
+@Website(PluginInfo.WEBSITE)
 public class ZeroDurabilityPlugin extends JavaPlugin implements Listener {
     private FileConfiguration configuration;
 
