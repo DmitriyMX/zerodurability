@@ -10,7 +10,6 @@ buildscript {
     }
 }
 
-import org.apache.tools.ant.filters.ReplaceTokens
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.TypeSpec
@@ -48,12 +47,6 @@ dependencies {
         exclude(module: 'bungeecord-chat')
     }
 }
-
-processResources {
-    filteringCharset 'UTF-8'
-    filter(ReplaceTokens, tokens: [BUKKIT_PLUGIN_VERSION: project.version.toString()])
-}
-
 
 shadowJar {
     archiveBaseName.set(project.name)
