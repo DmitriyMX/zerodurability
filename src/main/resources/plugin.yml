@@ -1,3 +1,0 @@
-name: ZeroDurability
-main: ru.dmitriymx.bukkit.zerodurability.ZeroDurabilityPlugin
-version: @BUKKIT_PLUGIN_VERSION@

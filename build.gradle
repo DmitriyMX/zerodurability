@@ -22,6 +22,9 @@ repositories {
 }
 
 dependencies {
+    annotationProcessor('org.spigotmc:plugin-annotations:1.2.2-SNAPSHOT')
+    compileOnly('org.spigotmc:plugin-annotations:1.2.2-SNAPSHOT')
+
     compileOnly('org.spigotmc:spigot-api:1.18.1-R0.1-SNAPSHOT') {
         exclude(module: 'gson')
         exclude(module: 'guava')
