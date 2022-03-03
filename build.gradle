@@ -1,5 +1,20 @@
 //file:noinspection GroovyAssignabilityCheck
+//file:noinspection SpellCheckingInspection
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath('com.squareup:javapoet:1.13.0')
+    }
+}
+
 import org.apache.tools.ant.filters.ReplaceTokens
+import com.squareup.javapoet.FieldSpec
+import com.squareup.javapoet.JavaFile
+import com.squareup.javapoet.TypeSpec
+import javax.lang.model.element.Modifier
 
 plugins {
     id 'java'
@@ -54,21 +69,25 @@ idea.module {
     generatedSourceDirs += file(genSrcDir)
 }
 
+def static buildField(String name, String value) {
+    return FieldSpec.builder(String.class, name)
+        .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+        .initializer('$S', value)
+        .build()
+}
+
 def generatePluginInfoClass(Project project, String genSrcDir) {
     def rootPackageDir = 'ru/dmitriymx/bukkit/zerodurability'
     file("${genSrcDir}/${rootPackageDir}").mkdirs()
-    //noinspection GrUnresolvedAccess
-    file("${genSrcDir}/${rootPackageDir}/PluginInfo.java").text = """package ${rootPackageDir.replaceAll('/', '.')};
 
-public final class PluginInfo {
-    public static final String NAME = "${project.name}";
-    public static final String VERSION = "${project.version.toString()}";
-    public static final String AUTHOR = "DmitriyMX";
-    public static final String WEBSITE = "https://gitlab.com/DmitriyMX/zerodurability";
-
-    private PluginInfo() {}
-}
-"""
+    JavaFile.builder("${rootPackageDir.replaceAll('/', '.')}", TypeSpec.classBuilder("PluginInfo")
+        .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+        .addField(buildField('NAME', "${project.name}"))
+        .addField(buildField('VERSION', "${project.version.toString()}"))
+        .addField(buildField('AUTHOR', 'DmitriyMX'))
+        .addField(buildField('WEBSITE', 'https://gitlab.com/DmitriyMX/zerodurability'))
+        .build())
+        .build().writeTo(file(genSrcDir))
 }
 generatePluginInfoClass(project, genSrcDir)
 
